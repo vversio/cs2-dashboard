@@ -2,16 +2,25 @@
 
 A full-stack data engineering and quantitative analysis pipeline for Counter-Strike 2 esports betting markets.
 
-![n8n Automation Architecture](./imgs/Screenshot%202026-06-17%20183621.png)
-
-![n8n Automation Architecture](./imgs/Screenshot%202026-06-17%20183546.png)
-
-## 🚀 Overview
+## Overview
 This project continuously scrapes, structures, and analyzes live CS2 betting odds against actual match outcomes. By running an autonomous ETL loop on a home server (Proxmox), it captures bookmaker-implied probabilities, strips the vigorish (bookmaker margin), and flags potential market mispricings in real-time.
 
 **Note:** This repository serves as a static showcase only. When deployed on Streamlit Community Cloud, it automatically falls back to pre-computed snapshot data to demonstrate full functionality without requiring a live connection to the home database.
 
-## 🏗️ Architecture & ETL Loop
+## Architecture & ETL Loop
+
+### 1. The 2-Hour Odds Ingestion Cycle (AI Parsing Layer)
+Traditional CSS scraping is brittle and fails against dynamic web elements. This pipeline bypasses standard scrapers by deploying an autonomous LLM parsing layer.
+*   **Anti-Bot Evasion:** Integrates FlareSolverr to autonomously bypass Cloudflare protections.
+*   **LLM Extraction:** Routes raw HTML to a local **Qwen 2.5 LLM** (via Ollama) to dynamically parse unstructured odds data into standardized JSON.
+*   **Database:** Upserts validated data into a normalized PostgreSQL database.
+
+![Odds Ingestion Pipeline](./imgs/Screenshot%202026-06-17%20183546.png)
+
+### 2. The Nightly Results Logger
+Executes a nightly HTTP request cycle to extract resolved match outcomes, utilizing programmatic entity resolution to reconcile inconsistent team name variants across different data providers.
+
+![Results Logger Pipeline](./imgs/Screenshot%202026-06-17%20183621.png)
 
 The backend relies on a robust ETL pipeline built to handle dynamic JavaScript-heavy websites and unstructured text:
 
@@ -29,7 +38,7 @@ graph TD;
     D -->|Entity Resolution SQL| F[Streamlit Dashboard];
 ```
 
-## 🧠 Key Engineering Highlights
+## Key Engineering Highlights
 
 ### 1. Vig-Stripping Math
 Bookmakers build a profit margin (vigorish or "vig") into their odds. To find the "true" implied probability, we must mathematically remove this margin:
@@ -79,7 +88,7 @@ except Exception as e:
     return df, False
 ```
 
-## 🛠️ Local Development
+## Local Development
 
 If you have access to the live PostgreSQL database:
 1. `python -m venv .venv`
