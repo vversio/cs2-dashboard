@@ -2,14 +2,14 @@
 
 A full-stack data engineering and quantitative analysis pipeline for Counter-Strike 2 esports betting markets.
 
-![Odds Ingestion Pipeline](./imgs/Screenshot%202026-06-17%20183621.png)
+![n8n Automation Architecture](./imgs/Screenshot%202026-06-17%20183621.png)
 
-![Results Logger Pipeline](./imgs/Screenshot%202026-06-17%20183546.png)
+![n8n Automation Architecture](./imgs/Screenshot%202026-06-17%20183546.png)
 
 ## 🚀 Overview
 This project continuously scrapes, structures, and analyzes live CS2 betting odds against actual match outcomes. By running an autonomous ETL loop on a home server (Proxmox), it captures bookmaker-implied probabilities, strips the vigorish (bookmaker margin), and flags potential market mispricings in real-time.
 
-**Note:** This repository serves as a static showcase for recruiters. When deployed on Streamlit Community Cloud, it automatically falls back to pre-computed snapshot data to demonstrate full functionality without requiring a live connection to the home database.
+**Note:** This repository serves as a static showcase only. When deployed on Streamlit Community Cloud, it automatically falls back to pre-computed snapshot data to demonstrate full functionality without requiring a live connection to the home database.
 
 ## 🏗️ Architecture & ETL Loop
 
